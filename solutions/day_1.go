@@ -13,8 +13,13 @@ import (
 
 
 // first gather input from text files
+// part 1:
 // sort input numbers
 // loop through and summarize
+// part 2:
+// add left vals to dictionary
+// loop through right vals to count
+// calculate similarity score after
 
 func gather_input() ([]int, []int) {
     if len(os.Args) <= 1 {
@@ -51,7 +56,7 @@ func find_distance(a int, b int) int {
     return int(math.Abs(float64(b) - float64(a)))
 }
 
-func problem_1_soln(l1 []int, l2 []int) int {
+func solve_problem_1(l1 []int, l2 []int) int {
     gather_input()
     distance_sum := 0
     sort.Ints(l1)
@@ -64,8 +69,32 @@ func problem_1_soln(l1 []int, l2 []int) int {
     return distance_sum
 }
 
+func solve_problem_2(l1 []int, l2 []int) int {
+    similarity_sum := 0
+    seen_left := make(map[int]int)
+    for _, val := range l1 {
+        seen_left[val] = 0
+    }
+
+    for _, val := range l2 {
+        _, ok := seen_left[val]
+        if ok {
+            seen_left[val] += 1
+        }
+    }
+
+    for _, val := range l1 {
+        similarity_sum += val * seen_left[val]
+    }
+    
+    return similarity_sum
+}
+
 func main() {
+    //example_list1 := []int{3, 4, 2, 1, 3, 3}
+    //example_list2 := []int{4, 3, 5, 3, 9, 3}
     list1, list2 := gather_input()
     fmt.Println("Hello, World!")
-    fmt.Println(problem_1_soln(list1, list2))
+    fmt.Println(solve_problem_1(list1, list2))
+    fmt.Println(solve_problem_2(list1, list2))
 }
